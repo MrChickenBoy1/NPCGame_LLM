@@ -1,0 +1,203 @@
+[gd_scene load_steps=13 format=3 uid="uid://teuhshyuaryw"]
+
+[ext_resource type="Script" uid="uid://cgwp1vg2643dq" path="res://NPC_confi.gd" id="1_4d7sh"]
+[ext_resource type="FontFile" uid="uid://bn71kv4b8l7es" path="res://Assets/Font/CalSans-Regular.ttf" id="1_wtcfe"]
+[ext_resource type="Script" uid="uid://b3w5bh7mli7e0" path="res://Scripts/name.gd" id="2_0e48y"]
+[ext_resource type="Script" uid="uid://ddcsuocg07ka3" path="res://humour.gd" id="3_epypp"]
+[ext_resource type="Script" uid="uid://ddfp8gxlaiyf0" path="res://lazy.gd" id="4_q6r6c"]
+[ext_resource type="Script" uid="uid://ivbpivh0bjjb" path="res://emotional.gd" id="5_kdubu"]
+[ext_resource type="Script" uid="uid://brcn7wbbadooq" path="res://eccentric.gd" id="6_kdubu"]
+[ext_resource type="Script" uid="uid://dnkd5ark37e8l" path="res://active_skills.gd" id="7_d21ai"]
+[ext_resource type="Script" uid="uid://crgprud40etf0" path="res://passive_skills.gd" id="8_rj586"]
+
+[sub_resource type="Theme" id="Theme_0e48y"]
+default_font = ExtResource("1_wtcfe")
+default_font_size = 70
+
+[sub_resource type="Theme" id="Theme_wtcfe"]
+default_font = ExtResource("1_wtcfe")
+
+[sub_resource type="Theme" id="Theme_epypp"]
+default_font = ExtResource("1_wtcfe")
+
+[node name="npc_creation" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4d7sh")
+metadata/_edit_lock_ = true
+
+[node name="Title" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 371.0
+offset_top = 59.0
+offset_right = 842.0
+offset_bottom = 162.0
+scale = Vector2(0.954616, 0.954616)
+theme = SubResource("Theme_0e48y")
+text = "NPC Creation"
+
+[node name="name" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 484.0
+offset_top = 162.0
+offset_right = 698.0
+offset_bottom = 199.0
+scale = Vector2(0.970588, 0.970588)
+placeholder_text = "name"
+script = ExtResource("2_0e48y")
+
+[node name="Humour" type="HSlider" parent="."]
+layout_mode = 0
+offset_left = 354.0
+offset_top = 222.0
+offset_right = 784.0
+offset_bottom = 238.0
+value = 50.0
+script = ExtResource("3_epypp")
+
+[node name="min" type="RichTextLabel" parent="Humour"]
+layout_mode = 0
+offset_left = -25.0
+offset_top = -2.0
+offset_right = -7.0
+offset_bottom = 24.0
+theme = SubResource("Theme_wtcfe")
+text = "1
+"
+
+[node name="max" type="RichTextLabel" parent="Humour"]
+layout_mode = 0
+offset_left = 439.0
+offset_top = -2.0
+offset_right = 654.0
+offset_bottom = 22.0
+scale = Vector2(0.97498, 0.97498)
+text = "10"
+
+[node name="Lazy" type="HSlider" parent="."]
+layout_mode = 0
+offset_left = 354.0
+offset_top = 268.0
+offset_right = 784.0
+offset_bottom = 284.0
+value = 50.0
+script = ExtResource("4_q6r6c")
+
+[node name="min2" type="RichTextLabel" parent="Lazy"]
+layout_mode = 0
+offset_left = -25.0
+offset_top = -6.0
+offset_right = -17.0
+offset_bottom = 18.0
+theme = SubResource("Theme_wtcfe")
+text = "1
+"
+
+[node name="max2" type="RichTextLabel" parent="Lazy"]
+layout_mode = 0
+offset_left = 439.0
+offset_top = -6.0
+offset_right = 724.0
+offset_bottom = 21.0
+scale = Vector2(0.97498, 0.97498)
+text = "10"
+
+[node name="Emotional" type="HSlider" parent="."]
+layout_mode = 0
+offset_left = 355.0
+offset_top = 314.0
+offset_right = 785.0
+offset_bottom = 330.0
+value = 50.0
+script = ExtResource("5_kdubu")
+
+[node name="min3" type="RichTextLabel" parent="Emotional"]
+layout_mode = 0
+offset_left = -26.0
+offset_top = -6.0
+offset_right = -11.0
+offset_bottom = 15.0
+theme = SubResource("Theme_wtcfe")
+text = "1
+"
+
+[node name="max3" type="RichTextLabel" parent="Emotional"]
+layout_mode = 0
+offset_left = 438.0
+offset_top = -6.00001
+offset_right = 483.0
+offset_bottom = 27.0
+scale = Vector2(0.97498, 0.97498)
+text = "10"
+
+[node name="Eccentric" type="HSlider" parent="."]
+layout_mode = 0
+offset_left = 355.0
+offset_top = 361.0
+offset_right = 785.0
+offset_bottom = 377.0
+value = 50.0
+script = ExtResource("6_kdubu")
+
+[node name="min4" type="RichTextLabel" parent="Eccentric"]
+layout_mode = 0
+offset_left = -26.0
+offset_top = -5.0
+offset_right = -10.0
+offset_bottom = 18.0
+theme = SubResource("Theme_wtcfe")
+text = "1
+"
+
+[node name="max4" type="RichTextLabel" parent="Eccentric"]
+layout_mode = 0
+offset_left = 438.0
+offset_top = -5.00002
+offset_right = 481.0
+offset_bottom = 29.0
+scale = Vector2(0.97498, 0.97498)
+text = "10"
+
+[node name="active_skills" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 344.0
+offset_top = 437.0
+offset_right = 558.0
+offset_bottom = 474.0
+scale = Vector2(0.970588, 0.970588)
+placeholder_text = "active skills"
+script = ExtResource("7_d21ai")
+
+[node name="passive_skills" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 596.0
+offset_top = 437.0
+offset_right = 810.0
+offset_bottom = 474.0
+scale = Vector2(0.970588, 0.970588)
+placeholder_text = "passive skills"
+script = ExtResource("8_rj586")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 489.0
+offset_top = 519.0
+offset_right = 647.0
+offset_bottom = 570.0
+theme = SubResource("Theme_epypp")
+text = "Create NPC"
+
+[connection signal="text_changed" from="name" to="name" method="_on_text_changed"]
+[connection signal="value_changed" from="Humour" to="Humour" method="_on_value_changed"]
+[connection signal="value_changed" from="Lazy" to="Lazy" method="_on_value_changed"]
+[connection signal="value_changed" from="Emotional" to="Emotional" method="_on_value_changed"]
+[connection signal="value_changed" from="Eccentric" to="Eccentric" method="_on_value_changed"]
+[connection signal="text_changed" from="active_skills" to="active_skills" method="_on_text_changed"]
+[connection signal="text_changed" from="passive_skills" to="passive_skills" method="_on_text_changed"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

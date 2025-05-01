@@ -11,5 +11,10 @@ config_version=5
 [application]
 
 config/name="NPC_Game"
+run/main_scene="uid://teuhshyuaryw"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[rendering]
+
+environment/defaults/default_clear_color=Color(0.0980392, 0.0980392, 0.0980392, 1)
