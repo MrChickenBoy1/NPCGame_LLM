@@ -1,14 +1,14 @@
 [gd_scene load_steps=13 format=3 uid="uid://teuhshyuaryw"]
 
-[ext_resource type="Script" uid="uid://cgwp1vg2643dq" path="res://NPC_confi.gd" id="1_4d7sh"]
+[ext_resource type="Script" uid="uid://cgwp1vg2643dq" path="res://Scripts/NPC_confi.gd" id="1_4d7sh"]
 [ext_resource type="FontFile" uid="uid://bn71kv4b8l7es" path="res://Assets/Font/CalSans-Regular.ttf" id="1_wtcfe"]
 [ext_resource type="Script" uid="uid://b3w5bh7mli7e0" path="res://Scripts/name.gd" id="2_0e48y"]
-[ext_resource type="Script" uid="uid://ddcsuocg07ka3" path="res://humour.gd" id="3_epypp"]
-[ext_resource type="Script" uid="uid://ddfp8gxlaiyf0" path="res://lazy.gd" id="4_q6r6c"]
-[ext_resource type="Script" uid="uid://ivbpivh0bjjb" path="res://emotional.gd" id="5_kdubu"]
-[ext_resource type="Script" uid="uid://brcn7wbbadooq" path="res://eccentric.gd" id="6_kdubu"]
-[ext_resource type="Script" uid="uid://dnkd5ark37e8l" path="res://active_skills.gd" id="7_d21ai"]
-[ext_resource type="Script" uid="uid://crgprud40etf0" path="res://passive_skills.gd" id="8_rj586"]
+[ext_resource type="Script" uid="uid://ddcsuocg07ka3" path="res://Scripts/humour.gd" id="3_epypp"]
+[ext_resource type="Script" uid="uid://ddfp8gxlaiyf0" path="res://Scripts/lazy.gd" id="4_q6r6c"]
+[ext_resource type="Script" uid="uid://ivbpivh0bjjb" path="res://Scripts/emotional.gd" id="5_kdubu"]
+[ext_resource type="Script" uid="uid://brcn7wbbadooq" path="res://Scripts/eccentric.gd" id="6_kdubu"]
+[ext_resource type="Script" uid="uid://dnkd5ark37e8l" path="res://Scripts/active_skills.gd" id="7_d21ai"]
+[ext_resource type="Script" uid="uid://crgprud40etf0" path="res://Scripts/passive_skills.gd" id="8_rj586"]
 
 [sub_resource type="Theme" id="Theme_0e48y"]
 default_font = ExtResource("1_wtcfe")
