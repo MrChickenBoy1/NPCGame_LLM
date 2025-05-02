@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgay2s18lb1ie"]
+
+[ext_resource type="FontFile" uid="uid://bn71kv4b8l7es" path="res://Assets/Font/CalSans-Regular.ttf" id="1_iypli"]
+
+[sub_resource type="Theme" id="Theme_f08tt"]
+default_font = ExtResource("1_iypli")
+default_font_size = 70
+
+[node name="Waiting" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 291.0
+offset_top = 281.0
+offset_right = 948.0
+offset_bottom = 384.0
+scale = Vector2(0.954616, 0.954616)
+theme = SubResource("Theme_f08tt")
+text = "Creating your NPC..."

@@ -1,14 +1,10 @@
 {
-	"active_skills": [
-		"dancing",
-		" laughing"
-	],
-	"eccentric": 39.0,
-	"emotional": 75.0,
-	"humour": 69.0,
-	"lazy": 33.0,
+	"active_skills": [],
+	"diary_entry": [],
+	"eccentric": 37.0,
+	"emotional": 58.0,
+	"humour": 65.0,
+	"lazy": 36.0,
 	"name": "Akshat",
-	"passive_skills": [
-		"reading"
-	]
+	"passive_skills": []
 }

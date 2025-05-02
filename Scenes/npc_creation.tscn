@@ -1,24 +1,24 @@
 [gd_scene load_steps=13 format=3 uid="uid://teuhshyuaryw"]
 
-[ext_resource type="Script" uid="uid://cgwp1vg2643dq" path="res://Scripts/NPC_confi.gd" id="1_4d7sh"]
-[ext_resource type="FontFile" uid="uid://bn71kv4b8l7es" path="res://Assets/Font/CalSans-Regular.ttf" id="1_wtcfe"]
-[ext_resource type="Script" uid="uid://b3w5bh7mli7e0" path="res://Scripts/name.gd" id="2_0e48y"]
-[ext_resource type="Script" uid="uid://ddcsuocg07ka3" path="res://Scripts/humour.gd" id="3_epypp"]
-[ext_resource type="Script" uid="uid://ddfp8gxlaiyf0" path="res://Scripts/lazy.gd" id="4_q6r6c"]
-[ext_resource type="Script" uid="uid://ivbpivh0bjjb" path="res://Scripts/emotional.gd" id="5_kdubu"]
-[ext_resource type="Script" uid="uid://brcn7wbbadooq" path="res://Scripts/eccentric.gd" id="6_kdubu"]
-[ext_resource type="Script" uid="uid://dnkd5ark37e8l" path="res://Scripts/active_skills.gd" id="7_d21ai"]
-[ext_resource type="Script" uid="uid://crgprud40etf0" path="res://Scripts/passive_skills.gd" id="8_rj586"]
+[ext_resource type="Script" uid="uid://cgwp1vg2643dq" path="res://Scripts/NPC_confi.gd" id="1_dv4o8"]
+[ext_resource type="FontFile" uid="uid://bn71kv4b8l7es" path="res://Assets/Font/CalSans-Regular.ttf" id="2_ae2xm"]
+[ext_resource type="Script" uid="uid://b3w5bh7mli7e0" path="res://Scripts/name.gd" id="3_io1ng"]
+[ext_resource type="Script" uid="uid://ddcsuocg07ka3" path="res://Scripts/humour.gd" id="4_cv2gw"]
+[ext_resource type="Script" uid="uid://ddfp8gxlaiyf0" path="res://Scripts/lazy.gd" id="5_wdkq8"]
+[ext_resource type="Script" uid="uid://ivbpivh0bjjb" path="res://Scripts/emotional.gd" id="6_d2wgs"]
+[ext_resource type="Script" uid="uid://brcn7wbbadooq" path="res://Scripts/eccentric.gd" id="7_kbwuq"]
+[ext_resource type="Script" uid="uid://dnkd5ark37e8l" path="res://Scripts/active_skills.gd" id="8_2gl2u"]
+[ext_resource type="Script" uid="uid://crgprud40etf0" path="res://Scripts/passive_skills.gd" id="9_6o0gf"]
 
 [sub_resource type="Theme" id="Theme_0e48y"]
-default_font = ExtResource("1_wtcfe")
+default_font = ExtResource("2_ae2xm")
 default_font_size = 70
 
 [sub_resource type="Theme" id="Theme_wtcfe"]
-default_font = ExtResource("1_wtcfe")
+default_font = ExtResource("2_ae2xm")
 
 [sub_resource type="Theme" id="Theme_epypp"]
-default_font = ExtResource("1_wtcfe")
+default_font = ExtResource("2_ae2xm")
 
 [node name="npc_creation" type="Control"]
 layout_mode = 3
@@ -29,7 +29,7 @@ offset_top = -2.0
 offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_4d7sh")
+script = ExtResource("1_dv4o8")
 metadata/_edit_lock_ = true
 
 [node name="Title" type="RichTextLabel" parent="."]
@@ -50,7 +50,7 @@ offset_right = 698.0
 offset_bottom = 199.0
 scale = Vector2(0.970588, 0.970588)
 placeholder_text = "name"
-script = ExtResource("2_0e48y")
+script = ExtResource("3_io1ng")
 
 [node name="Humour" type="HSlider" parent="."]
 layout_mode = 0
@@ -59,7 +59,7 @@ offset_top = 222.0
 offset_right = 784.0
 offset_bottom = 238.0
 value = 50.0
-script = ExtResource("3_epypp")
+script = ExtResource("4_cv2gw")
 
 [node name="min" type="RichTextLabel" parent="Humour"]
 layout_mode = 0
@@ -87,7 +87,7 @@ offset_top = 268.0
 offset_right = 784.0
 offset_bottom = 284.0
 value = 50.0
-script = ExtResource("4_q6r6c")
+script = ExtResource("5_wdkq8")
 
 [node name="min2" type="RichTextLabel" parent="Lazy"]
 layout_mode = 0
@@ -115,7 +115,7 @@ offset_top = 314.0
 offset_right = 785.0
 offset_bottom = 330.0
 value = 50.0
-script = ExtResource("5_kdubu")
+script = ExtResource("6_d2wgs")
 
 [node name="min3" type="RichTextLabel" parent="Emotional"]
 layout_mode = 0
@@ -143,7 +143,7 @@ offset_top = 361.0
 offset_right = 785.0
 offset_bottom = 377.0
 value = 50.0
-script = ExtResource("6_kdubu")
+script = ExtResource("7_kbwuq")
 
 [node name="min4" type="RichTextLabel" parent="Eccentric"]
 layout_mode = 0
@@ -172,7 +172,7 @@ offset_right = 558.0
 offset_bottom = 474.0
 scale = Vector2(0.970588, 0.970588)
 placeholder_text = "active skills"
-script = ExtResource("7_d21ai")
+script = ExtResource("8_2gl2u")
 
 [node name="passive_skills" type="LineEdit" parent="."]
 layout_mode = 0
@@ -182,7 +182,7 @@ offset_right = 810.0
 offset_bottom = 474.0
 scale = Vector2(0.970588, 0.970588)
 placeholder_text = "passive skills"
-script = ExtResource("8_rj586")
+script = ExtResource("9_6o0gf")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0

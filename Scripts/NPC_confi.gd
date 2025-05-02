@@ -16,7 +16,8 @@ func save_data(name, humour, lazy, emotional, eccentric, active_skills, passive_
 		"emotional" : emotional,
 		"eccentric" : eccentric,
 		"active_skills" : active_skills,
-		"passive_skills" : passive_skills
+		"passive_skills" : passive_skills,
+		"diary_entry" : []
 	}
 	
 	var json_text := JSON.stringify(npc_data, "\t")
@@ -25,6 +26,8 @@ func save_data(name, humour, lazy, emotional, eccentric, active_skills, passive_
 	if file:
 		file.store_string(json_text)
 		file.close()
+		
+	get_tree().change_scene_to_file("res://Scenes/main.tscn")
 	
 	
 
