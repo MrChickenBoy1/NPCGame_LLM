@@ -9,13 +9,11 @@ extends Control
 @onready var passive_skills_ins: LineEdit = $passive_skills
 
 func save_data(name, humour, lazy, emotional, eccentric, active_skills, passive_skills):
+	var personality = [{"humour" : humour, "lazy" : lazy, "emotional" : emotional, "eccentric" : eccentric}]
 	var npc_data := {
 		"name" : name,
-		"humour" : humour,
-		"lazy" : lazy,
-		"emotional" : emotional,
-		"eccentric" : eccentric,
-		"active_skills" : active_skills,
+		"personality" : personality,
+ 		"active_skills" : active_skills,
 		"passive_skills" : passive_skills,
 		"diary_entry" : []
 	}

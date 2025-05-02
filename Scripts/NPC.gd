@@ -5,7 +5,7 @@ var json_str
 var result
 @onready var activity_label: RichTextLabel = $Title
 
-
+ 
 
 func _ready() -> void:
 	print ("NPC boi is here mfs")

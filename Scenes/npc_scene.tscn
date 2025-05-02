@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://c316r1ywdo0ho"]
+[gd_scene load_steps=5 format=3 uid="uid://c316r1ywdo0ho"]
 
 [ext_resource type="FontFile" uid="uid://bn71kv4b8l7es" path="res://Assets/Font/CalSans-Regular.ttf" id="1_ayieh"]
 [ext_resource type="Script" uid="uid://ckojxfa12u210" path="res://Scripts/NPC.gd" id="1_qqtv6"]
+[ext_resource type="PackedScene" uid="uid://dgay2s18lb1ie" path="res://Scenes/waiting.tscn" id="3_gnhme"]
 
 [sub_resource type="Theme" id="Theme_qqtv6"]
 default_font = ExtResource("1_ayieh")
@@ -15,6 +16,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_qqtv6")
+
+[node name="Waiting" parent="." instance=ExtResource("3_gnhme")]
+layout_mode = 1
+offset_left = -3.0
+offset_right = -3.0
 
 [node name="Title" type="RichTextLabel" parent="."]
 layout_mode = 0
