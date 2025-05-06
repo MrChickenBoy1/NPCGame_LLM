@@ -30,7 +30,7 @@ func save_data(name, humour, lazy, emotional, eccentric, active_skills, passive_
 	
 
 func _on_button_pressed() -> void:
-	var name = name_ins.name
+	var name_npc = name_ins.name
 	var humour = humour_ins.humour
 	var lazy = lazy_ins.lazy
 	var emotional = emotional_ins.emotional
@@ -38,6 +38,6 @@ func _on_button_pressed() -> void:
 	var active_skills = active_skills_ins.active_skills
 	var passive_skills = passive_skills_ins.passive_skills
 	
-	save_data(name, humour, lazy, emotional, eccentric, active_skills, passive_skills)
+	save_data(name_npc, humour, lazy, emotional, eccentric, active_skills, passive_skills)
 	
 	

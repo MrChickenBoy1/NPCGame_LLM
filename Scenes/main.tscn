@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://xh2flc1mw264"]
+[gd_scene load_steps=4 format=3 uid="uid://xh2flc1mw264"]
 
 [ext_resource type="Script" uid="uid://3pew1c1i8xql" path="res://Scripts/llm.gd" id="1_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://dgay2s18lb1ie" path="res://Scenes/waiting.tscn" id="2_8gbba"]
+[ext_resource type="Script" uid="uid://b8t8f8b6x6eg7" path="res://Scripts/sql_db.gd" id="3_8gbba"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -21,4 +22,10 @@ offset_bottom = -5.0
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
+[node name="Timer" type="Timer" parent="."]
+
+[node name="sql_db" type="Node" parent="."]
+script = ExtResource("3_8gbba")
+
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

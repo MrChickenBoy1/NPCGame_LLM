@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://teuhshyuaryw"]
+[gd_scene load_steps=14 format=3 uid="uid://teuhshyuaryw"]
 
 [ext_resource type="Script" uid="uid://cgwp1vg2643dq" path="res://Scripts/NPC_confi.gd" id="1_dv4o8"]
 [ext_resource type="FontFile" uid="uid://bn71kv4b8l7es" path="res://Assets/Font/CalSans-Regular.ttf" id="2_ae2xm"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://brcn7wbbadooq" path="res://Scripts/eccentric.gd" id="7_kbwuq"]
 [ext_resource type="Script" uid="uid://dnkd5ark37e8l" path="res://Scripts/active_skills.gd" id="8_2gl2u"]
 [ext_resource type="Script" uid="uid://crgprud40etf0" path="res://Scripts/passive_skills.gd" id="9_6o0gf"]
+[ext_resource type="PackedScene" uid="uid://dwjjh7tvlh3ic" path="res://Scenes/sql_db.tscn" id="10_ae2xm"]
 
 [sub_resource type="Theme" id="Theme_0e48y"]
 default_font = ExtResource("2_ae2xm")
@@ -80,6 +81,16 @@ offset_bottom = 22.0
 scale = Vector2(0.97498, 0.97498)
 text = "10"
 
+[node name="Humour_txt" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 356.0
+offset_top = 207.0
+offset_right = 1207.0
+offset_bottom = 299.0
+scale = Vector2(0.206927, 0.206927)
+theme = SubResource("Theme_0e48y")
+text = "Humour"
+
 [node name="Lazy" type="HSlider" parent="."]
 layout_mode = 0
 offset_left = 354.0
@@ -107,6 +118,16 @@ offset_right = 724.0
 offset_bottom = 21.0
 scale = Vector2(0.97498, 0.97498)
 text = "10"
+
+[node name="Lazy_txt" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 356.0
+offset_top = 252.0
+offset_right = 827.0
+offset_bottom = 344.0
+scale = Vector2(0.206927, 0.206927)
+theme = SubResource("Theme_0e48y")
+text = "Lazy"
 
 [node name="Emotional" type="HSlider" parent="."]
 layout_mode = 0
@@ -136,6 +157,16 @@ offset_bottom = 27.0
 scale = Vector2(0.97498, 0.97498)
 text = "10"
 
+[node name="Emotional_txt" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 356.0
+offset_top = 298.0
+offset_right = 827.0
+offset_bottom = 390.0
+scale = Vector2(0.206927, 0.206927)
+theme = SubResource("Theme_0e48y")
+text = "Emotional"
+
 [node name="Eccentric" type="HSlider" parent="."]
 layout_mode = 0
 offset_left = 355.0
@@ -163,6 +194,16 @@ offset_right = 481.0
 offset_bottom = 29.0
 scale = Vector2(0.97498, 0.97498)
 text = "10"
+
+[node name="Emotional_txt2" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 356.0
+offset_top = 346.0
+offset_right = 827.0
+offset_bottom = 438.0
+scale = Vector2(0.206927, 0.206927)
+theme = SubResource("Theme_0e48y")
+text = "Eccentric"
 
 [node name="active_skills" type="LineEdit" parent="."]
 layout_mode = 0
@@ -193,6 +234,8 @@ offset_bottom = 570.0
 theme = SubResource("Theme_epypp")
 text = "Create NPC"
 
+[node name="sql_db" parent="." instance=ExtResource("10_ae2xm")]
+
 [connection signal="text_changed" from="name" to="name" method="_on_text_changed"]
 [connection signal="value_changed" from="Humour" to="Humour" method="_on_value_changed"]
 [connection signal="value_changed" from="Lazy" to="Lazy" method="_on_value_changed"]
@@ -201,3 +244,4 @@ text = "Create NPC"
 [connection signal="text_changed" from="active_skills" to="active_skills" method="_on_text_changed"]
 [connection signal="text_changed" from="passive_skills" to="passive_skills" method="_on_text_changed"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Button" to="sql_db" method="_on_button_pressed"]

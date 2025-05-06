@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://c316r1ywdo0ho"]
+[gd_scene load_steps=4 format=3 uid="uid://c316r1ywdo0ho"]
 
 [ext_resource type="FontFile" uid="uid://bn71kv4b8l7es" path="res://Assets/Font/CalSans-Regular.ttf" id="1_ayieh"]
 [ext_resource type="Script" uid="uid://ckojxfa12u210" path="res://Scripts/NPC.gd" id="1_qqtv6"]
-[ext_resource type="PackedScene" uid="uid://dgay2s18lb1ie" path="res://Scenes/waiting.tscn" id="3_gnhme"]
 
 [sub_resource type="Theme" id="Theme_qqtv6"]
 default_font = ExtResource("1_ayieh")
@@ -17,17 +16,22 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_qqtv6")
 
-[node name="Waiting" parent="." instance=ExtResource("3_gnhme")]
-layout_mode = 1
-offset_left = -3.0
-offset_right = -3.0
-
 [node name="Title" type="RichTextLabel" parent="."]
 layout_mode = 0
 offset_left = 97.0
 offset_top = 85.0
-offset_right = 754.0
+offset_right = 1988.0
 offset_bottom = 188.0
 scale = Vector2(0.624673, 0.624673)
 theme = SubResource("Theme_qqtv6")
 text = "{name}'s Activities"
+
+[node name="Title2" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 97.0
+offset_top = 167.0
+offset_right = 3204.0
+offset_bottom = 270.0
+scale = Vector2(0.409396, 0.409396)
+theme = SubResource("Theme_qqtv6")
+text = "from [] to []"

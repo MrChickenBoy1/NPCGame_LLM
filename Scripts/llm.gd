@@ -2,11 +2,19 @@ extends Control
 
 @onready var http_request: HTTPRequest = $HTTPRequest
 @onready var waiting: Control = $Waiting
+@onready var timer: Timer = $Timer
+
 var NPC_SCENE = preload("res://Scenes/npc_scene.tscn")
 var json_data = FileAccess.open("res://Data/npc_data.json", FileAccess.READ)
 var json_str
 var result
-var prompt 
+var prompt
+var time_elapsed 
+var start_npc
+var schedule_json
+var time_schedule
+var NPC_scene
+
 
 func load_secrets() -> Dictionary:
 	var file := FileAccess.open("res://secrets/screts.json", FileAccess.READ)
@@ -16,10 +24,31 @@ func load_secrets() -> Dictionary:
 	return {}
 
 
-func NPC_created():
-	var NPC_scene = NPC_SCENE.instantiate()
-	add_child(NPC_scene)
-	NPC_scene.visible = false
+func load_schedule(schedule_str):
+	var schedule_json = JSON.parse_string(schedule_str)
+	return schedule_json
+	
+
+func NPC_created(schedule_json):
+	time_schedule = []
+	
+	if waiting.is_visible_in_tree():
+		waiting.queue_free()
+	if NPC_scene == null:
+		NPC_scene = NPC_SCENE.instantiate()
+		add_child(NPC_scene)
+		NPC_scene.get_child(0).text = "Currently: "+schedule_json[0]["activity"]
+	
+	var iter = 0
+	for i in schedule_json:
+		print (i)
+		time_schedule.append([])
+		time_schedule[iter].append(i["start"])
+		time_schedule[iter].append(i["start"] +i["duration"] )
+		iter += 1
+	print(time_schedule)
+	
+	return time_schedule
 	
 	
 	
@@ -32,7 +61,7 @@ func send_to_openrouter(prompt: String) -> void:
 	]
 
 	var body = {
-		"model": "mistralai/mistral-7b-instruct:free",
+		"model": "google/learnlm-1.5-pro-experimental:free",
 		"messages": [
 			{ "role": "system", "content": "You are an assistant that ONLY returns pure valid JSON lists without any extra text." },
 			{ "role": "user", "content": prompt }
@@ -46,20 +75,44 @@ func send_to_openrouter(prompt: String) -> void:
 		print("Request error: ", err)
 
 
+func clean_json_string(raw_string: String) -> String:
+	var cleaned = raw_string.strip_edges()
+
+	# Try to isolate the JSON using first and last square brackets
+	var start_index = cleaned.find("[")
+	var end_index = cleaned.rfind("]")
+
+	if start_index == -1 or end_index == -1:
+		return ""  # JSON not found
+
+	# Extract only the JSON array portion
+	cleaned = cleaned.substr(start_index, end_index - start_index + 1)
+	return cleaned
+
 
 func _on_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	if response_code == 200:
 		var json_string = body.get_string_from_utf8()
-		var data = JSON.parse_string(json_string)
+		var parsed = JSON.parse_string(json_string)
+		
+		if parsed:
+			var raw_output = parsed["choices"][0]["message"]["content"]
+			var cleaned_json = clean_json_string(raw_output)
+			var final_data = JSON.parse_string(cleaned_json)
 
-		if data:
-			var content = data
-			print(content["choices"][0]["message"]["content"])
-			NPC_created()
+			if final_data:
+				schedule_json = load_schedule(cleaned_json)
+				timer.start(86400)
+				await get_tree().process_frame
+				await get_tree().create_timer(0.1).timeout
+				start_npc = true
+			else:
+				print("❌ JSON parse failed after cleaning.")
 		else:
-			print("❌ Failed to parse JSON.")
+			print("❌ Unexpected JSON format from OpenRouter.")
 	else:
 		print("❌ HTTP error: ", response_code)
+
 	
 		
 		
@@ -67,32 +120,84 @@ func _ready() -> void:
 	if json_data:
 		json_str = json_data.get_as_text()
 		result = JSON.parse_string(json_str)
-	prompt = """
-Create a 24-hour schedule (0 to 1440 minutes) for an NPC with the following attributes:
-- Personality traits: %s
-- Active skills: %s
-- Passive skills: %s
+	prompt = """You are simulating a **compressed 24-hour day** in just **60 real-time minutes** for a virtual NPC.
 
-Rules:
-- Output ONLY a single flat JSON list of dictionaries (NO text or explanation).
-- Each task must have these exact keys:
-  - "start_minute" (integer): time task starts, 0 ≤ value < 1440
-  - "duration" (integer): duration in minutes (sum of all durations must be 1440)
-  - "description" (string): short, natural description of the activity
-  - "type" (string): one of ["productive", "leisure", "social"]
-  - "activity_type" (string): either "active" or "passive"
+🧠 NPC Details:
+- Name: %s
+- Personality: %s
+- Hobbies:
+  - passive: %s
+  - active: %s
 
-Guidelines:
-- The day should be LESS than or equal to 1440 minutes. All tasks should happen before 1400.
-- Schedule must total **exactly 1440 minutes** 
-- The day should begin at **(360 minutes)** or after but before (600 minutes).
-- Sleep should happen at **the end of the schedule**, lasting **at least 6 hours** and **ending before midnight (1440 minutes)**.
-- Sleep duration at night should be such that it ends at 1740 or later.
-- Activities should reflect the NPC's personality and skills.
-- Include a **balanced mix** of productive, leisure, and social activities.
-- Tasks should vary in duration (e.g., 30, 45, 60, 90 minutes).
-- **Ensure a logical flow** (e.g., work → break → social time → sleep).
-"""% [str(result["personality"]), str(result["active_skills"]), str(result["passive_skills"])]
+🕒 Simulation Concept:
+- This is a **miniature 1-hour version of a full day**.
+- Each minute represents ~24 minutes in a normal day.
+- The NPC should go through a believable "day cycle": waking up, working, eating, socializing, relaxing, and sleeping.
+- Think of this as simulating an entire day in fast-forward.
+
+🗓 Output Format (JSON List Only):
+Return a list of **non-overlapping tasks** representing this fast-forwarded day. Each task is a dictionary with:
+- `"start"`: start time in minutes (0–59)
+- `"duration"`: duration in minutes (1–60)
+- `"activity"`: short **present continuous** verb phrase (e.g., "reading book", "eating snack", "talking with friend")
+- `"type"`: "active" or "passive"
+- `"category"`: "work", "leisure", "social", or "personal"
+
+🧠 Personality Affects:
+- **Lazy** → fewer intense tasks, more passive moments
+- **Eccentric** → unexpected or creatively placed tasks
+- **Emotional** → deeper reflection or journaling
+- Use hobbies to inspire specific activities
+
+⚠ Rules:
+- Simulate a **whole day compressed into 1 hour**
+- Total duration of tasks must fit between **0–60 minutes**
+- Tasks must **not overlap**
+- Must include **work**, **leisure**, **social**, and **personal** activities
+- Think in terms of a **fast-forwarded full day**, not just one hour
+
+📝 Language Requirement:
+- The "activity" field **must** use a present continuous verb form (e.g., “listening to music”, “writing notes”, “watching video”).
+
+**VERY IMPORTANT**  
+- Only return valid **raw JSON** — no markdown, no explanation, no surrounding text.
+
+📤 Output Example:
+[
+  { "start": 0, "duration": 5, "activity": "waking up", "type": "passive", "category": "personal" },
+  { "start": 5, "duration": 10, "activity": "reading book", "type": "passive", "category": "leisure" },
+  { "start": 15, "duration": 10, "activity": "coding project", "type": "active", "category": "work" },
+  { "start": 25, "duration": 5, "activity": "chatting online", "type": "passive", "category": "social" },
+  { "start": 30, "duration": 5, "activity": "eating lunch", "type": "passive", "category": "personal" },
+  { "start": 35, "duration": 10, "activity": "going for walk", "type": "active", "category": "personal" },
+  { "start": 45, "duration": 5, "activity": "browsing internet", "type": "passive", "category": "leisure" },
+  { "start": 50, "duration": 5, "activity": "writing journal", "type": "passive", "category": "personal" },
+  { "start": 55, "duration": 5, "activity": "falling asleep", "type": "passive", "category": "personal" }
+]"""% [str(result["name"]), str(result["personality"]), str(result["passive_skills"]), str(result["active_skills"])]
 
 
 	send_to_openrouter(prompt)
+
+var task_end = 0
+var task_current
+
+func _process(delta: float) -> void:
+	time_elapsed = 86400 - timer.time_left
+	if (start_npc == true):
+		print ("callinggg")
+		NPC_created(schedule_json)
+		start_npc = false
+		
+	if time_elapsed < 86400 and time_schedule != null:
+		var iter = 0
+		if time_elapsed > task_end:
+			for i in time_schedule:
+				if time_elapsed > i[0] and time_elapsed < i[1]:
+					task_current = iter
+					task_end = i[1]
+					print (task_current)
+				iter += 1
+				
+			NPC_scene.get_child(1).text = "From " + str(int(time_schedule[task_current][0])) + " seconds to " + str(int(time_schedule[task_current][1])) + " seconds."
+			NPC_scene.get_child(0).text = "Currently: "+schedule_json[task_current]["activity"]
+		

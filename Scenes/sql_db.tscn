@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwjjh7tvlh3ic"]
+
+[ext_resource type="Script" uid="uid://b8t8f8b6x6eg7" path="res://Scripts/sql_db.gd" id="1_ap0t6"]
+
+[node name="sql_db" type="Node"]
+script = ExtResource("1_ap0t6")
