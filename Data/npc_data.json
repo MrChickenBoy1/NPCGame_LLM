@@ -1,14 +1,22 @@
 {
-	"active_skills": [],
+	"active_skills": [
+		"running",
+		" going gym",
+		" calisthenics"
+	],
 	"diary_entry": [],
 	"name": "name",
-	"passive_skills": [],
+	"passive_skills": [
+		"reading",
+		" writing",
+		" programming"
+	],
 	"personality": [
 		{
-			"eccentric": 39.0,
-			"emotional": 65.0,
-			"humour": 66.0,
-			"lazy": 30.0
+			"eccentric": 37.0,
+			"emotional": 11.0,
+			"humour": 86.0,
+			"lazy": 100.0
 		}
 	]
 }

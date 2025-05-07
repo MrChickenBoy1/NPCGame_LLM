@@ -14,7 +14,9 @@ var start_npc
 var schedule_json
 var time_schedule
 var NPC_scene
-
+var day = 0
+var type_prompt
+var normal_string
 
 func load_secrets() -> Dictionary:
 	var file := FileAccess.open("res://secrets/screts.json", FileAccess.READ)
@@ -52,7 +54,7 @@ func NPC_created(schedule_json):
 	
 	
 	
-func send_to_openrouter(prompt: String) -> void:
+func send_to_openrouter(prompt: String, system: String) -> void:
 	var url = "https://openrouter.ai/api/v1/chat/completions"
 	var api_key = load_secrets().get("api_key")
 	var headers = [
@@ -63,7 +65,7 @@ func send_to_openrouter(prompt: String) -> void:
 	var body = {
 		"model": "google/learnlm-1.5-pro-experimental:free",
 		"messages": [
-			{ "role": "system", "content": "You are an assistant that ONLY returns pure valid JSON lists without any extra text." },
+			{ "role": "system", "content": system},
 			{ "role": "user", "content": prompt }
 		]
 	}
@@ -92,24 +94,34 @@ func clean_json_string(raw_string: String) -> String:
 
 func _on_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	if response_code == 200:
-		var json_string = body.get_string_from_utf8()
-		var parsed = JSON.parse_string(json_string)
+		print(type_prompt)
+		if type_prompt == "json":
+			var json_string = body.get_string_from_utf8()
+			var parsed = JSON.parse_string(json_string)
 		
-		if parsed:
-			var raw_output = parsed["choices"][0]["message"]["content"]
-			var cleaned_json = clean_json_string(raw_output)
-			var final_data = JSON.parse_string(cleaned_json)
+			if parsed:
+				var raw_output = parsed["choices"][0]["message"]["content"]
+				var cleaned_json = clean_json_string(raw_output)
+				var final_data = JSON.parse_string(cleaned_json)
 
-			if final_data:
-				schedule_json = load_schedule(cleaned_json)
-				timer.start(86400)
-				await get_tree().process_frame
-				await get_tree().create_timer(0.1).timeout
-				start_npc = true
+				if final_data:
+					schedule_json = load_schedule(cleaned_json)
+					timer.start(86400)
+					await get_tree().process_frame
+					await get_tree().create_timer(0.1).timeout
+					start_npc = true
+
+				else:
+					print("❌ JSON parse failed after cleaning.")
 			else:
-				print("❌ JSON parse failed after cleaning.")
-		else:
-			print("❌ Unexpected JSON format from OpenRouter.")
+				print("❌ Unexpected JSON format from OpenRouter.")
+		elif type_prompt == "normal":
+			normal_string = body.get_string_from_utf8()
+			normal_string = JSON.parse_string(normal_string)
+			print(normal_string["choices"][0]["message"]["content"])
+			
+			
+			
 	else:
 		print("❌ HTTP error: ", response_code)
 
@@ -175,8 +187,8 @@ Return a list of **non-overlapping tasks** representing this fast-forwarded day.
   { "start": 55, "duration": 5, "activity": "falling asleep", "type": "passive", "category": "personal" }
 ]"""% [str(result["name"]), str(result["personality"]), str(result["passive_skills"]), str(result["active_skills"])]
 
-
-	send_to_openrouter(prompt)
+	type_prompt = "json"
+	send_to_openrouter(prompt, "You are an assistant that ONLY returns pure valid JSON lists without any extra text.")
 
 var task_end = 0
 var task_current
@@ -200,4 +212,26 @@ func _process(delta: float) -> void:
 				
 			NPC_scene.get_child(1).text = "From " + str(int(time_schedule[task_current][0])) + " seconds to " + str(int(time_schedule[task_current][1])) + " seconds."
 			NPC_scene.get_child(0).text = "Currently: "+schedule_json[task_current]["activity"]
-		
+			
+			var prompt = """You are an NPC simulation system.
+Given the personality, skills (active and passive) and the current activity of the NPC, generate a single realistic one-line note about how the NPC experienced or reacted to that activity.
+Do not include any explanations, formatting, or additional text. Just return the one-line note.
+
+Personality: %s
+Activity: %s
+Active skills: %s
+Passive skills: %s
+
+Respond with just one natural sentence describing the activity from the NPC’s point of view."""% [str(result["personality"]), str(schedule_json[task_current]["activity"]), str(result["active_skills"]), str(result["passive_skills"])]
+			type_prompt = "normal"
+			send_to_openrouter(prompt, "You are an internal narrative generator for an NPC in a life simulation.
+										Your role is to create short, realistic diary-style thoughts or reflections based on the NPC’s personality and current activity.
+										Keep each note natural, personal, and written in the NPC’s internal voice.
+										The note should be one sentence only, describing how the NPC felt or experienced the moment.
+										Be sensitive to the personality (e.g., anxious people may overthink, outgoing people may enjoy social interactions).
+										Avoid repeating sentence structures and do not use any quotes, bullet points, or formatting.")
+			await get_tree().create_timer(5.0).timeout
+
+
+func _on_timer_timeout() -> void:
+	day += 1
