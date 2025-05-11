@@ -63,7 +63,7 @@ func send_to_openrouter(prompt: String, system: String) -> void:
 	]
 
 	var body = {
-		"model": "google/learnlm-1.5-pro-experimental:free",
+		"model": "meta-llama/llama-3.2-3b-instruct:free",
 		"messages": [
 			{ "role": "system", "content": system},
 			{ "role": "user", "content": prompt }
@@ -100,6 +100,7 @@ func _on_http_request_request_completed(result: int, response_code: int, headers
 			var parsed = JSON.parse_string(json_string)
 		
 			if parsed:
+				print(parsed)
 				var raw_output = parsed["choices"][0]["message"]["content"]
 				var cleaned_json = clean_json_string(raw_output)
 				var final_data = JSON.parse_string(cleaned_json)
@@ -196,7 +197,6 @@ var task_current
 func _process(delta: float) -> void:
 	time_elapsed = 86400 - timer.time_left
 	if (start_npc == true):
-		print ("callinggg")
 		NPC_created(schedule_json)
 		start_npc = false
 		
@@ -228,10 +228,70 @@ Respond with just one natural sentence describing the activity from the NPC’s 
 										Your role is to create short, realistic diary-style thoughts or reflections based on the NPC’s personality and current activity.
 										Keep each note natural, personal, and written in the NPC’s internal voice.
 										The note should be one sentence only, describing how the NPC felt or experienced the moment.
-										Be sensitive to the personality (e.g., anxious people may overthink, outgoing people may enjoy social interactions).
+										Be sensitive to the personality (e.g., anxious people may overthink, outgoing people may enjoy social interactions). Keep the note very casual, and human, keep it simple.
 										Avoid repeating sentence structures and do not use any quotes, bullet points, or formatting.")
-			await get_tree().create_timer(5.0).timeout
+			await get_tree().create_timer(10.0).timeout
+			
+			$sql_db.add_data_activtity()
 
 
 func _on_timer_timeout() -> void:
+	start_npc = false
+	var new_day_prompt = """You are simulating a **compressed 24-hour day** in just **60 real-time minutes** for a virtual NPC.
+
+🧠 NPC Details:
+- Name: %s
+- Personality: %s
+- Hobbies:
+  - passive: %s
+  - active: %s
+
+📅 Previous Day Schedule (in JSON):
+%s
+
+🧠 Your Task:
+Generate a new schedule for **today**, based on the **previous day's**. The NPC should follow a roughly similar pattern, but:
+- Change **at least 30%%** of the activities subtly
+- Adjust start times and durations slightly, to reflect human-like variability
+- Add new or replace old activities that feel organic to the NPC’s life
+- Base changes on personality: lazy = lower effort, eccentric = more spontaneous or weird shifts, emotional = more introspective or personal time
+
+🕒 Simulation Concept:
+- This is a **miniature 1-hour version of a full day**
+- Each minute = ~24 minutes of real life
+- The NPC goes through waking, working, eating, socializing, relaxing, and sleeping — all in 60 minutes
+
+🗓 Output Format (JSON List Only):
+Return a list of **non-overlapping tasks** representing this fast-forwarded day. Each task is a dictionary with:
+- `"start"`: start time in minutes (0–59)
+- `"duration"`: duration in minutes (1–60)
+- `"activity"`: short **present continuous** verb phrase (e.g., "reading book", "eating snack", "talking with friend")
+- `"type"`: "active" or "passive"
+- `"category"`: "work", "leisure", "social", or "personal"
+
+⚠ Rules:
+- Total time must fit inside 60 minutes
+- No overlapping tasks
+- Must include **at least one** of each category: **work**, **leisure**, **social**, and **personal**
+- “activity” field must always use **present continuous verb form** (e.g., “watching video” not “watch video”)
+
+📝 Output Requirement:
+- Return **ONLY valid JSON**
+- No markdown, no extra notes, no explanation — only raw JSON list of activities
+
+📤 Output Example:
+[
+  { "start": 0, "duration": 5, "activity": "waking up", "type": "passive", "category": "personal" },
+  { "start": 5, "duration": 10, "activity": "reading book", "type": "passive", "category": "leisure" },
+  { "start": 15, "duration": 10, "activity": "coding project", "type": "active", "category": "work" },
+  { "start": 25, "duration": 5, "activity": "chatting online", "type": "passive", "category": "social" },
+  { "start": 30, "duration": 5, "activity": "eating lunch", "type": "passive", "category": "personal" },
+  { "start": 35, "duration": 10, "activity": "going for walk", "type": "active", "category": "personal" },
+  { "start": 45, "duration": 5, "activity": "browsing internet", "type": "passive", "category": "leisure" },
+  { "start": 50, "duration": 5, "activity": "writing journal", "type": "passive", "category": "personal" },
+  { "start": 55, "duration": 5, "activity": "falling asleep", "type": "passive", "category": "personal" }
+]
+"""% [str(result["name"]), str(schedule_json[task_current]["personality"]), str(result["passive_skills"]), str(result["active_skills"]), str(schedule_json)]
 	day += 1
+	type_prompt = "json"
+	send_to_openrouter(new_day_prompt, "You are an assistant that ONLY returns pure valid JSON lists without any extra text.")

@@ -4,9 +4,12 @@ var database : SQLite
 var path_db = "res://Data/npc_data.db"
 
 func _ready():
+	print(get_tree().current_scene.name)
 	database = SQLite.new()
 	database.path = "res://Data/npc_data.db"
 	database.open_db()
+	if (get_tree().current_scene.name == "Main"):
+		config_activity_db()
 		
 
 func _on_button_pressed() -> void:
@@ -32,11 +35,15 @@ func _on_button_pressed() -> void:
 		
 	}
 	
-	database.insert_row("npc_personality", data)
+	var success = database.insert_row("npc_activity_log", data)
+	if success:
+		print("Insert successful")
+	else:
+		print("Insert failed")
 
 
 
-func activity_log() -> void:
+func config_activity_db() -> void:
 	var activty_conf = {
 				"id" : {"data_type":"int", "primary_key":true, "not_null":true, "auto_increment": true},
 				"day" : {"data_type" : "int"},
@@ -51,15 +58,20 @@ func activity_log() -> void:
 			
 	database.create_table("npc_activity_log", activty_conf)
 			
+func add_data_activtity():
+	
 	var data = {
 		"day" : get_parent().day,
 		"start_time" : int(get_parent().time_schedule[get_parent().task_current][0]),
 		"end_time" : int(get_parent().time_schedule[get_parent().task_current][0]+get_parent().time_schedule[get_parent().task_current][1]),
 		"activity" : get_parent().schedule_json[get_parent().task_current]["activity"],
-		"type" : get_parent().schedulejson[get_parent().task_current]["type"],
-		"category" : get_parent().schedulejson[get_parent().task_current]["category"],
-		"note" : get_parent().normal_string,
+		"type" : get_parent().schedule_json[get_parent().task_current]["type"],
+		"category" : get_parent().schedule_json[get_parent().task_current]["category"],
+		"note" : get_parent().normal_string["choices"][0]["message"]["content"],
 		
 	}
 	
 	database.insert_row("npc_activity_log", data)
+	print("hello")
+
+	
